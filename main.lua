@@ -2,6 +2,8 @@ function love.load ()
     Object = require('classic')
 
     require('Game')
+    require('Fish')
+    require('Enemie')
 
     game = Game()
 end
