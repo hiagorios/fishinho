@@ -7,30 +7,36 @@ function Fish:new(x, y, size)
     self.img = love.graphics.newImage("assets/image/fish_1.png")
     self.width = self.img:getWidth()
     self.height = self.img:getHeight()
+    self.velX = 0
+    self.velY = 0
+    self.acelX = 0
+    self.acelY = 0
 
     -- used to make the fish face the direction according to the arrow key used
     self.direction = 1
 end
 
 function Fish:update(dt)
-    if love.keyboard.isDown('up') then
-        self.y = self.y - dt*100
-    elseif love.keyboard.isDown('down') then
-        self.y = self.y + dt*100
-    end
+    self.velX = (self.velX * 0.95) + self.acelX * dt
+    self.velY = (self.velY * 0.95) + self.acelY * dt
+    self.x = self.x + self.velX * dt
+    self.y = self.y + self.velY * dt
 
-    if love.keyboard.isDown('left') then
-        self.x = self.x - dt*100
-        if (self.direction == 1) then
-            self.direction = -1
-            self.x = self.x + self.width*self.size
-        end
-    elseif love.keyboard.isDown('right') then
-        self.x = self.x + dt*100
-        if (self.direction == -1) then
-            self.direction = 1
-            self.x = self.x - self.width*self.size
-        end
+    if love.keyboard.isDown("down") and not love.keyboard.isDown("up") then
+        self.acelY = 750
+    elseif love.keyboard.isDown("up") and not love.keyboard.isDown("down") then
+        self.acelY = -750
+    elseif not love.keyboard.isDown("down") and not love.keyboard.isDown("up") then
+        self.acelY = 300
+    end
+    if love.keyboard.isDown("right") and not love.keyboard.isDown("left") then
+        self.acelX = 750
+        self.direction = 1
+    elseif love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
+        self.acelX = -750
+        self.direction = -1
+    elseif not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
+        self.acelX = 0
     end
 
     if self.x < 0 then
