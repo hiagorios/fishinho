@@ -32,6 +32,12 @@ function Fish:update(dt)
             self.x = self.x - self.width*self.size
         end
     end
+
+    if self.x < 0 then
+        self.x = 0
+    elseif self.x > love.graphics.getWidth() - self.width then
+        self.x = love.graphics.getWidth() - self.width
+    end
 end
 
 function Fish:draw()
