@@ -5,6 +5,7 @@ function Enemie:new(x, y, size, direction)
     self.y = y
     self.speed = 200
     self.movementDt = 0
+    self.movementY = 0.5
     self.size = size
     self.direction = direction
     self.images = {}
@@ -17,17 +18,17 @@ function Enemie:new(x, y, size, direction)
 end
 
 function Enemie:update(dt)
-    --[[self.movementDt = self.movementDt + dt
-    if self.movementDt % 2.0 == 0 then
-        self.y = self.y + 0.5
-        self.x = self.x + self.direction
-    else
-        self.y = self.y - 0.5
-        self.x = self.x + self.direction
+    self.movementDt = self.movementDt + dt
+
+    if self.movementDt > 1 then
+        self.movementDt = 0
+        self.movementY= - self.movementY
     end
-    --]]
-    self.x = self.x + (math.cos(math.rad(0)) * self.speed * dt)
-    self.y = self.y + (math.sin(math.rad(90)) * self.speed * dt)
+
+    self.y = self.y + self.movementY
+    self.x = self.x + self.direction
+    -- self.x = self.x + (math.cos(math.rad(0)) * self.speed * dt)
+    -- self.y = self.y + (math.sin(math.rad(90)) * self.speed * dt)
 end
 
 function Enemie:draw()

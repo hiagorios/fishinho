@@ -8,7 +8,7 @@ function Game:new()
     background = {img = love.graphics.newImage("assets/image/background.png")}
 
     fish = Fish(screenWidth/2, screenHeight/2, 0.2)
-    enemiesTable = {Enemie(0, screenHeight, 0.2, 1)}
+    enemiesTable = {Enemie(0, screenHeight/2, 0.2, 1)}
     gameStarted = false
 end
 
