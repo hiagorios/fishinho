@@ -5,8 +5,8 @@ function Fish:new(x, y, size)
     self.y = y
     self.size = size
     self.img = love.graphics.newImage("assets/image/fish_1.png")
-    self.width = self.img:getWidth()
-    self.height = self.img:getHeight()
+    self.width = self.img:getWidth()*self.size
+    self.height = self.img:getHeight()*self.size
     self.velX = 0
     self.velY = 0
     self.acelX = 0
@@ -31,18 +31,30 @@ function Fish:update(dt)
     end
     if love.keyboard.isDown("right") and not love.keyboard.isDown("left") then
         self.acelX = 750
-        self.direction = 1
+        if self.direction == -1 then
+            self.direction = 1
+            self.x = self.x - self.width*self.size
+        end
     elseif love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
         self.acelX = -750
-        self.direction = -1
+        if self.direction == 1 then
+            self.direction = -1
+            self.x = self.x + self.width*self.size
+        end
     elseif not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
         self.acelX = 0
     end
 
-    if self.x < 0 then
+    if self.x + self.direction*self.width*self.size < 0 then
         self.x = 0
     elseif self.x > love.graphics.getWidth() - self.width then
         self.x = love.graphics.getWidth() - self.width
+    end
+
+    if self.y < 0 then
+        self.y = 0
+    elseif self.y > love.graphics.getHeight() - self.height then
+        self.y = love.graphics.getHeight() - self.height
     end
 end
 
