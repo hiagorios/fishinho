@@ -45,7 +45,9 @@ function Fish:update(dt)
         self.acelX = 0
     end
 
-    if self.x + self.direction*self.width*self.size < 0 then
+    if self.x - self.width < 0 and self.direction == -1 then
+        self.x = self.width
+    elseif self.x < 0 and self.direction == 1 then
         self.x = 0
     elseif self.x > love.graphics.getWidth() - self.width then
         self.x = love.graphics.getWidth() - self.width
