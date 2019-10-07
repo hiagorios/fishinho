@@ -5,22 +5,23 @@ function Fish:new(x, y, size)
     self.y = y
     self.size = size
     self.img = love.graphics.newImage("assets/image/fish_1.png")
-    self.width = self.img:getWidth()*self.size
-    self.height = self.img:getHeight()*self.size
+    self.width = self.img:getWidth()
+    self.height = self.img:getHeight()
     self.velX = 0
     self.velY = 0
     self.acelX = 0
     self.acelY = 0
+    self.dtAnim = 1
 
     -- used to make the fish face the direction according to the arrow key used
     self.direction = 1
 end
 
-function Fish:update(dt)
+function Fish:update(dt)    
     self.velX = (self.velX * 0.95) + self.acelX * dt
     self.velY = (self.velY * 0.95) + self.acelY * dt
     self.x = self.x + self.velX * dt
-    self.y = self.y + self.velY * dt
+    self.y = self.y + self.velY * dt    
 
     if love.keyboard.isDown("down") and not love.keyboard.isDown("up") then
         self.acelY = 750
@@ -31,19 +32,19 @@ function Fish:update(dt)
     end
     if love.keyboard.isDown("right") and not love.keyboard.isDown("left") then
         self.acelX = 750
-        if self.direction == -1 then
-            self.direction = 1
-            self.x = self.x - self.width*self.size
-        end
+        self.direction = 1
+        self.dtAnim = self.dtAnim + dt
     elseif love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
         self.acelX = -750
-        if self.direction == 1 then
-            self.direction = -1
-            self.x = self.x + self.width*self.size
-        end
+        self.direction = -1
+        self.dtAnim = self.dtAnim - dt
     elseif not love.keyboard.isDown("left") and not love.keyboard.isDown("right") then
         self.acelX = 0
     end
+    
+    self.dtAnim = self.dtAnim + (0.02 * self.direction)
+    self.dtAnim = self.dtAnim < -1.0 and -1.0 or self.dtAnim
+    self.dtAnim = self.dtAnim > 1.0 and 1.0 or self.dtAnim
 
     if self.x - self.width < 0 and self.direction == -1 then
         self.x = self.width
@@ -61,6 +62,6 @@ function Fish:update(dt)
 end
 
 function Fish:draw()
-    love.graphics.draw(self.img, self.x, self.y, 0, self.size*self.direction, self.size)
+    love.graphics.draw(self.img, self.x, self.y, 0, self.size*(self.direction * 0.2 +(self.dtAnim * 0.8)), self.size)
     love.graphics.print('Width:' .. self.width, 0,0 )
 end
