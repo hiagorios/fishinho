@@ -1,6 +1,6 @@
 Enemie = Object:extend()
 
-function Enemie:new(x, y, size, direction)
+function Enemie:new(x, y, size, direction, img)
     self.x = x
     self.y = y
     self.speed = 200
@@ -14,7 +14,7 @@ function Enemie:new(x, y, size, direction)
     table.insert(self.images, love.graphics.newImage("assets/image/fish_3.png"))
     table.insert(self.images, love.graphics.newImage("assets/image/fish_4.png"))
     table.insert(self.images, love.graphics.newImage("assets/image/fish_5.png"))
-    self.img = self.images[1]
+    self.img = self.images[img]
     self.width = self.img:getWidth()*self.size
     self.height = self.img:getHeight()*self.size
 end
@@ -29,8 +29,6 @@ function Enemie:update(dt)
 
     self.y = self.y + self.movementY
     self.x = self.x + self.direction
-    -- self.x = self.x + (math.cos(math.rad(0)) * self.speed * dt)
-    -- self.y = self.y + (math.sin(math.rad(90)) * self.speed * dt)
 end
 
 function Enemie:draw()

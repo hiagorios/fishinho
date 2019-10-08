@@ -8,13 +8,21 @@ function Game:new()
     background = {img = love.graphics.newImage("assets/image/background.png")}
 
     fish = Fish(screenWidth/2, screenHeight/2, 0.2)
-    enemiesTable = {Enemie(0, screenHeight/2, 0.2, 1), Enemie(screenWidth, screenHeight/3, 0.1, -1)}
+    enemiesTable = {}
     gameStarted = false
+    dtEnemies = 1
 end
 
 function Game:update(dt)
     if gameStarted then 
         fish:update(dt)
+
+        dtEnemies = dtEnemies - dt
+        if dtEnemies < 0 then
+            local enemie = randomEnemie()
+            table.insert(enemiesTable, enemie)
+            dtEnemies = 1
+        end
         for i,enemie in pairs(enemiesTable) do
             enemie:update(dt)
             if checkColision(fish, enemie) then
@@ -50,4 +58,17 @@ function checkColision(objA, objB)
         objA.y + objA.height > objB.y then
         return true
     end
+end
+
+function randomEnemie()
+    local x = love.math.random(0,1)*(screenWidth + 50)
+    local y = love.math.random(0, screenHeight)
+    local direction = -1
+    if x == 0 then
+        x = -50
+        direction = 1
+    end
+    local size = love.math.random(10)/100
+    local img = love.math.random(5)
+    return Enemie(x, y, size, direction, img)
 end
