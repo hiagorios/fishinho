@@ -15,6 +15,8 @@ function Enemie:new(x, y, size, direction)
     table.insert(self.images, love.graphics.newImage("assets/image/fish_4.png"))
     table.insert(self.images, love.graphics.newImage("assets/image/fish_5.png"))
     self.img = self.images[1]
+    self.width = self.img:getWidth()*self.size
+    self.height = self.img:getHeight()*self.size
 end
 
 function Enemie:update(dt)
@@ -32,6 +34,6 @@ function Enemie:update(dt)
 end
 
 function Enemie:draw()
-    love.graphics.draw(self.img, self.x, self.y, 0, self.size, self.size)
+    love.graphics.draw(self.img, self.x, self.y, 0, self.direction*self.size, self.size)
     love.graphics.print('movementDt: '.. self.movementDt, 0, 10)
 end

@@ -5,8 +5,8 @@ function Fish:new(x, y, size)
     self.y = y
     self.size = size
     self.img = love.graphics.newImage("assets/image/fish_1.png")
-    self.width = self.img:getWidth()
-    self.height = self.img:getHeight()
+    self.width = self.img:getWidth()*self.size
+    self.height = self.img:getHeight()*self.size
     self.velX = 0
     self.velY = 0
     self.acelX = 0
