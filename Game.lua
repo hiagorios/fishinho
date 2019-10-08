@@ -20,6 +20,7 @@ function Game:update(dt)
             if checkColision(fish, enemie) then
                 if enemie.size < fish.size then
                     table.remove(enemiesTable, i)
+                    fish:grow(0.05)
                 else
                     love.load()
                 end
