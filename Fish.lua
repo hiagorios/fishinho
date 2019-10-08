@@ -63,9 +63,10 @@ end
 
 function Fish:draw()
     love.graphics.draw(self.img, self.x, self.y, 0, self.size*(self.direction * 0.2 +(self.dtAnim * 0.8)), self.size)
-    love.graphics.print('Size:' .. self.size, 0,0 )
 end
 
 function Fish:grow(increment)
     self.size = self.size + increment
+    self.width = self.img:getWidth()*self.size
+    self.height = self.img:getHeight()*self.size
 end

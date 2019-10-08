@@ -11,6 +11,9 @@ function Game:new()
     enemiesTable = {}
     gameStarted = false
     dtEnemies = 1
+
+    --trilhaSonora = love.audio.newSource("assets/audio/trilha.wav", "stream")
+    love.graphics.setFont(love.graphics.newFont("assets/font/WISHFULWAVES.ttf", 20))
 end
 
 function Game:update(dt)
@@ -47,7 +50,7 @@ function Game:draw()
             enemie:draw()
         end
     else
-        love.graphics.print('Press enter to start', screenWidth/3, screenHeight/2, 0, 2, 2)
+        love.graphics.print('Press enter to start', screenWidth/4, screenHeight/2, 0, 2, 2)
     end
 end
 
@@ -68,7 +71,7 @@ function randomEnemie()
         x = -50
         direction = 1
     end
-    local size = love.math.random(10)/100
+    local size = love.math.random(20)/100
     local img = love.math.random(5)
     return Enemie(x, y, size, direction, img)
 end
