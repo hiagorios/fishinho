@@ -6,55 +6,65 @@ function Game:new()
     screenHeight = love.graphics.getHeight()
     screenWidth = love.graphics.getWidth()
     background = {img = love.graphics.newImage("assets/image/background.png")}
-
-    turtle = Turtle(screenWidth/2, screenHeight/2, 0.2)
-    enemiesTable = {}
-    gameStarted = false
-    dtEnemies = 1
-
+    love.graphics.setNewFont("assets/font/soopafre.ttf", 50)
     menuTrack = love.audio.newSource("assets/audio/menu.ogg", "stream")
     ingameTrack = love.audio.newSource("assets/audio/ingame.mp3", "stream")
-    love.graphics.setNewFont("assets/font/soopafre.ttf", 50)
+
+    dtBreath = 10
+    bubble = {img = love.graphics.newImage("assets/image/bubble.png"), size = 0.4}
+    bubble.width = bubble.img:getWidth()*bubble.size
+    bubble.height = bubble.img:getHeight()*bubble.size
+
+    turtle = Turtle(screenWidth/2, screenHeight/2, 0.2)
+    gameStarted = false
+    enemiesTable = {}
+    dtEnemies = 1
 end
 
 function Game:update(dt)
-    if gameStarted then 
+    if gameStarted then
         turtle:update(dt)
 
-        dtEnemies = dtEnemies - dt
-        if dtEnemies < 0 then
-            local enemie = randomEnemie(turtle.size)
-            table.insert(enemiesTable, enemie)
-            dtEnemies = 1
+        generateEnemies(dt)
+
+        if turtle.y <= 10 then
+            dtBreath = 10
         end
+
+        dtBreath = dtBreath - dt
+        if dtBreath <= 0 then
+            gameLost()
+        end
+        
         for i,enemie in pairs(enemiesTable) do
             enemie:update(dt)
             if checkColision(turtle, enemie) then
                 if enemie.size < turtle.size then
                     table.remove(enemiesTable, i)
-                    turtle:grow(0.05)
+                    turtle:grow(0.005)
                 else
-                    ingameTrack:stop()
-                    love.load()
+                    gameLost()
                 end
             end
         end
     else
         menuTrack:play()
         if love.keyboard.isDown('return') then
-            gameStarted = true
-            menuTrack:stop()
-            ingameTrack:play()
+            startGame()
         end
     end
 end
 
 function Game:draw()
-    love.graphics.draw(background.img, 0, background.y, 0)
+    love.graphics.draw(background.img, 0, background.y)
     if gameStarted then
         turtle:draw()
         for i,enemie in pairs(enemiesTable) do
             enemie:draw()
+        end
+        --love.graphics.print('Breath:'..dtBreath, 5, 100, 0, 0.5, 0.5)
+        for i = 1, math.floor(dtBreath) do
+            love.graphics.draw(bubble.img, i*(5+bubble.width), 0, 0, bubble.size, bubble.size)
         end
     else
         love.graphics.print('Press enter to start', screenWidth/4, screenHeight/2)
@@ -70,6 +80,15 @@ function checkColision(objA, objB)
     end
 end
 
+function generateEnemies(dt)
+    dtEnemies = dtEnemies - dt
+    if dtEnemies < 0 then
+        local enemie = randomEnemie(turtle.size)
+        table.insert(enemiesTable, enemie)
+        dtEnemies = 1
+    end
+end
+
 function randomEnemie(size)
     local x = love.math.random(0,1)*(screenWidth + 50)
     local y = love.math.random(0, screenHeight)
@@ -78,7 +97,18 @@ function randomEnemie(size)
         x = -50
         direction = 1
     end
-    local size = love.math.random(size*130)/100
+    local size = love.math.random(size*70, size*130)/100
     local img = love.math.random(5)
     return Enemie(x, y, size, direction, img)
+end
+
+function startGame()
+    gameStarted = true
+    menuTrack:stop()
+    ingameTrack:play()
+end
+
+function gameLost()
+    ingameTrack:stop()
+    love.load()
 end
