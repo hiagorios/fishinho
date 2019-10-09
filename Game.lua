@@ -23,7 +23,7 @@ function Game:update(dt)
 
         dtEnemies = dtEnemies - dt
         if dtEnemies < 0 then
-            local enemie = randomEnemie()
+            local enemie = randomEnemie(turtle.size)
             table.insert(enemiesTable, enemie)
             dtEnemies = 1
         end
@@ -34,6 +34,7 @@ function Game:update(dt)
                     table.remove(enemiesTable, i)
                     turtle:grow(0.05)
                 else
+                    ingameTrack:stop()
                     love.load()
                 end
             end
@@ -69,7 +70,7 @@ function checkColision(objA, objB)
     end
 end
 
-function randomEnemie()
+function randomEnemie(size)
     local x = love.math.random(0,1)*(screenWidth + 50)
     local y = love.math.random(0, screenHeight)
     local direction = -1
@@ -77,7 +78,7 @@ function randomEnemie()
         x = -50
         direction = 1
     end
-    local size = love.math.random(20)/100
+    local size = love.math.random(size*130)/100
     local img = love.math.random(5)
     return Enemie(x, y, size, direction, img)
 end
