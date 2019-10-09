@@ -33,5 +33,5 @@ end
 
 function Enemie:draw()
     love.graphics.draw(self.img, self.x, self.y, 0, self.direction*self.size, self.size)
-    --love.graphics.print('movementDt: '.. self.movementDt, 0, 10)
+    love.graphics.print(self.size, self.x + self.width/2, self.y + self.height/2, 0.2, 0.2)
 end

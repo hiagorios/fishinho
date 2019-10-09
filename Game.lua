@@ -7,18 +7,19 @@ function Game:new()
     screenWidth = love.graphics.getWidth()
     background = {img = love.graphics.newImage("assets/image/background.png")}
 
-    fish = Fish(screenWidth/2, screenHeight/2, 0.2)
+    turtle = Turtle(screenWidth/2, screenHeight/2, 0.2)
     enemiesTable = {}
     gameStarted = false
     dtEnemies = 1
 
-    --trilhaSonora = love.audio.newSource("assets/audio/trilha.wav", "stream")
-    love.graphics.setFont(love.graphics.newFont("assets/font/WISHFULWAVES.ttf", 20))
+    menuTrack = love.audio.newSource("assets/audio/menu.ogg", "stream")
+    ingameTrack = love.audio.newSource("assets/audio/ingame.mp3", "stream")
+    love.graphics.setNewFont("assets/font/soopafre.ttf", 50)
 end
 
 function Game:update(dt)
     if gameStarted then 
-        fish:update(dt)
+        turtle:update(dt)
 
         dtEnemies = dtEnemies - dt
         if dtEnemies < 0 then
@@ -28,29 +29,34 @@ function Game:update(dt)
         end
         for i,enemie in pairs(enemiesTable) do
             enemie:update(dt)
-            if checkColision(fish, enemie) then
-                if enemie.size < fish.size then
+            if checkColision(turtle, enemie) then
+                if enemie.size < turtle.size then
                     table.remove(enemiesTable, i)
-                    fish:grow(0.05)
+                    turtle:grow(0.05)
                 else
                     love.load()
                 end
             end
         end
-    elseif love.keyboard.isDown('return') then
-        gameStarted = true
+    else
+        menuTrack:play()
+        if love.keyboard.isDown('return') then
+            gameStarted = true
+            menuTrack:stop()
+            ingameTrack:play()
+        end
     end
 end
 
 function Game:draw()
     love.graphics.draw(background.img, 0, background.y, 0)
     if gameStarted then
-        fish:draw()
+        turtle:draw()
         for i,enemie in pairs(enemiesTable) do
             enemie:draw()
         end
     else
-        love.graphics.print('Press enter to start', screenWidth/4, screenHeight/2, 0, 2, 2)
+        love.graphics.print('Press enter to start', screenWidth/4, screenHeight/2)
     end
 end
 
