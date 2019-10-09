@@ -15,6 +15,8 @@ function Game:new()
     bubble.width = bubble.img:getWidth()*bubble.size
     bubble.height = bubble.img:getHeight()*bubble.size
 
+    score = 0
+
     turtle = Turtle(screenWidth/2, screenHeight/2, 0.2)
     gameStarted = false
     enemiesTable = {}
@@ -42,6 +44,7 @@ function Game:update(dt)
                 if enemie.size < turtle.size then
                     table.remove(enemiesTable, i)
                     turtle:grow(0.005)
+                    score = score + math.floor(enemie.size*10)
                 else
                     gameLost()
                 end
@@ -62,9 +65,9 @@ function Game:draw()
         for i,enemie in pairs(enemiesTable) do
             enemie:draw()
         end
-        --love.graphics.print('Breath:'..dtBreath, 5, 100, 0, 0.5, 0.5)
-        for i = 1, math.floor(dtBreath) do
+        for i = 0, math.floor(dtBreath) do
             love.graphics.draw(bubble.img, i*(5+bubble.width), 0, 0, bubble.size, bubble.size)
+            love.graphics.print('Score: '..score, 0, screenHeight/15, 0, 0.7, 0.7)
         end
     else
         love.graphics.print('Press enter to start', screenWidth/4, screenHeight/2)
