@@ -42,6 +42,11 @@ function Turtle:update(dt)
         self.acelX = 0
     end
     
+    if love.keyboard.isDown("lshift") then
+        self.acelX = 1.5 * self.acelX
+        self.acelY = 1.5 * self.acelY
+    end
+
     self.dtAnim = self.dtAnim + (0.02 * self.direction)
     self.dtAnim = self.dtAnim < -1.0 and -1.0 or self.dtAnim
     self.dtAnim = self.dtAnim > 1.0 and 1.0 or self.dtAnim
@@ -62,7 +67,9 @@ function Turtle:update(dt)
 end
 
 function Turtle:draw()
+    -- love.graphics.rectangle("fill", self.x, self.y,  self.width*(self.direction * 0.2 +(self.dtAnim * 0.8)), self.height)
     love.graphics.draw(self.img, self.x, self.y, 0, self.size*(self.direction * 0.2 +(self.dtAnim * 0.8)), self.size)
+    love.graphics.print(self.size, self.x + ((self.direction * 0.2 +(self.dtAnim * 0.8)) * self.width/2), self.y + self.height/2, 0.4, 0.4)
 end
 
 function Turtle:grow(increment)

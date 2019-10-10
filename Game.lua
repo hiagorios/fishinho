@@ -74,13 +74,31 @@ function Game:draw()
     end
 end
 
-function checkColision(objA, objB)
-    if objA.x < objB.x + objB.width and
-        objA.x + objA.width > objB.x and
-        objA.y < objB.y + objB.height and
-        objA.y + objA.height > objB.y then
+function verifyPoints(x1, y1, w1, h1, x2, y2, w2, h2)
+    if x1 < x2 + w2 and
+        x1 + w1 > x2 and
+        y1 < y2 + h2 and
+        y1 + h1 > y2 then
         return true
     end
+end
+
+function checkColision(objA, objB)
+    local x1 = objA.x
+    local w1 = objA.width
+
+    local x2 = objB.x
+    local w2 = objB.width
+
+    if objA.direction == -1 then
+        x1 = objA.x - objA.width --[[ * 0.2 +(objA.dtAnim * 0.8))]]
+    end
+
+    if objB.direction == -1 then
+        x2 = objB.x - objB.width
+    end
+
+    return verifyPoints(x1, objA.y, w1, objA.height, x2, objB.y, w2, objB.height)
 end
 
 function generateEnemies(dt)
